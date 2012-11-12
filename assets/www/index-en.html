@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title></title>
+        <link rel="stylesheet" href="css/jquery.mobile-1.0.1.min.css" />
+        <style>
+            /* App custom styles */
+        </style>
+        <script type="text/javascript" charset="utf-8" src="js/cordova-1.7.0.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/jquery.mobile-1.0.1.min.js"></script>
+    </head>
+    <body>
+        <div data-role="page" id="page1">
+        	<div data-theme="a" data-role="header" class="ui-header ui-bar-a" role="banner">
+                <h3 class="ui-title" tabindex="0" role="heading" aria-level="1">
+                    Random Password Generator
+                </h3>
+            </div>
+            <div data-role="content">
+                <fieldset data-role="controlgroup" data-type="vertical">
+                    <legend>
+                        Symbols to be used:
+                    </legend>
+                    <input name="letters" id="letters" type="checkbox" checked/>
+                    <label for="letters">
+                        Lower case letters (a..z)
+                    </label>
+                    <input name="capitals" id="capitals" type="checkbox" checked/>
+                    <label for="capitals">
+                        Upper case letters (A..Z)
+                    </label>
+                    <input name="digits" id="digits" type="checkbox" checked/>
+                    <label for="digits">
+                        Digits (0..9)
+                    </label>
+                    <input name="symbols" id="symbols" type="checkbox" />
+                    <label for="symbols">
+                        Special symbols (!+]?, etc.)
+                    </label>
+                </fieldset>    
+                <fieldset data-role="controlgroup" data-type="vertical">                    
+                    <label for="slider-0">Password length:</label>
+                </fieldset>
+   					<input type="range" name="pw_length" id="pw_length" value="8" min="0" max="25" step="1" />
+                <a id="generate_password" data-role="button" data-transition="fade" href="#" data-icon="check" data-iconpos="left" data-theme="b">
+                    Generate password!
+                </a>
+                <fieldset data-role="controlgroup">
+                    <label for="pw">
+                        Generated password:
+                    </label>
+                    <input id="pw" placeholder="" value="" type="text" readonly/>
+                </fieldset>
+            </div>
+        </div>
+        <script type="text/javascript">     
+        	document.addEventListener("deviceready", onDeviceReady, false);
+			function onDeviceReady() {
+			}
+			
+			$('#generate_password').click(function(){
+				password = new String();
+				minus = 'abcdefghijkmnopqrstuvwxyz';
+				mayus = 'ABCDEFGHJKLMNOPQRSTUVWXYZ';
+				numeros = '0123456789';
+				simbolos = '~!@#$%^&*()_+-=\|[]{};:,./<>?';
+				
+				caracteres = new String();
+				caracteres += (($('#letters').is(':checked')) ? minus : '');
+				caracteres += (($('#capitals').is(':checked')) ? mayus : '');
+				caracteres += (($('#digits').is(':checked')) ? numeros : '');
+				caracteres += (($('#symbols').is(':checked')) ? simbolos : '');
+				
+				if (caracteres.length < 1) {
+				  	navigator.notification.alert('You have to pick something to generate the password!',null,'Error','OK');
+				  	return(false);
+				}
+				console.log($(pw_length).val());
+				for (i = 0; i < $(pw_length).val(); i++) {
+				   password += caracteres.charAt(Math.floor(Math.random()*caracteres.length));
+				}
+				$('#pw').val(password);
+				$('#pw').click();
+			});
+			
+			$('#pw').click(function(){
+    			$(this).select();
+			});
+        </script>
+    </body>
+</html>
